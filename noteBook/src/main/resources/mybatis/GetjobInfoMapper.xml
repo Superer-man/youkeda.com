@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youkeda.notebook.service.noteBook.mapper.GetjobInfoMapper" >
+    <sql id="columnName">
+		a.GETJOB_INFO_ID AS "getjobInfoId",
+		a.SPECIALTY_INFO_ID AS "specialtyInfoId",
+		a.SPECIALTY_NAME AS "specialtyName",
+		a.POST_NAME AS "postName",
+		a.POST_PAY AS "postPay",
+		a.GETJOB_INFO AS "getjobInfo",
+		a.sob_id AS "sobId",
+		a.create_id AS "createId",
+		a.create_name AS "createName",
+		a.create_time AS "createTime",
+		a.create_post_id AS "createPostId",
+		a.create_post_name AS "createPostName",
+		a.update_post_id AS "updatePostId",
+		a.update_post_name AS "updatePostName",
+		a.update_id AS "updateId",
+		a.update_name AS "updateName",
+		a.update_time AS "updateTime",
+		a.flag AS "flag",
+		a.is_success AS "isSuccess",
+		a.success_code AS "successCode",
+		a.token AS "token"
+	</sql>
+
+    <!-- 新增     -->
+    <insert id="insertGetjobInfo" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity">
+        INSERT INTO
+        K_GETJOB_INFO        (
+			GETJOB_INFO_ID , 
+			SPECIALTY_INFO_ID , 
+			SPECIALTY_NAME , 
+			<if test="postName != null and postName !='' ">  POST_NAME , </if>
+			<if test="postPay != null and postPay !='' ">  POST_PAY , </if>
+			<if test="getjobInfo != null and getjobInfo !='' ">  GETJOB_INFO , </if>
+			sob_id , 
+			create_id , 
+			create_name , 
+			create_time , 
+			create_post_id , 
+			create_post_name , 
+			flag , 
+			<if test="isSuccess != null and isSuccess !='' ">  is_success , </if>
+			<if test="successCode != null and successCode !='' ">  success_code , </if>
+			token 
+        )
+        VALUES
+        (
+	          #{getjobInfoId}, 
+	          #{specialtyInfoId}, 
+	          #{specialtyName}, 
+			<if test="postName != null and postName !='' "> #{postName}, </if>
+			<if test="postPay != null and postPay !='' "> #{postPay}, </if>
+			<if test="getjobInfo != null and getjobInfo !='' "> #{getjobInfo}, </if>
+			 #{sobId}, 
+			 #{createId}, 
+			 #{createName}, 
+			 now(), 
+			 #{createPostId}, 
+			 #{createPostName}, 
+			 0, 
+			<if test="isSuccess != null and isSuccess !='' "> #{isSuccess}, </if>
+			<if test="successCode != null and successCode !='' "> #{successCode}, </if>
+			 #{token}
+        )
+    </insert>
+
+    <update id="updateGetjobInfo" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity">
+        update
+        K_GETJOB_INFO        set
+			<if test="getjobInfoId != null and getjobInfoId !='' "> GETJOB_INFO_ID = #{getjobInfoId}, </if>
+			<if test="specialtyInfoId != null and specialtyInfoId !='' "> SPECIALTY_INFO_ID = #{specialtyInfoId}, </if>
+			<if test="specialtyName != null and specialtyName !='' "> SPECIALTY_NAME = #{specialtyName}, </if>
+			<if test="postName != null and postName !='' "> POST_NAME = #{postName}, </if>
+			<if test="postPay != null and postPay !='' "> POST_PAY = #{postPay}, </if>
+			<if test="getjobInfo != null and getjobInfo !='' "> GETJOB_INFO = #{getjobInfo}, </if>
+			<if test="flag != null and flag !='' "> flag = #{flag}, </if>
+			<if test="token != null and token !='' "> token = #{token}, </if>
+			update_id = #{updateId},
+			update_name = #{updateName},
+			update_post_id = #{updatePostId},
+			update_post_name = #{updatePostName},
+			update_time = now()
+        where
+        1=1
+            and GETJOB_INFO_ID= #{getjobInfoId}
+         	and token= #{oldToken}
+    </update>
+
+    <!-- 查询 -->
+    <select id="listGetjobInfo" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity">
+        SELECT
+        <include refid="columnName" />
+        FROM
+        K_GETJOB_INFO a
+        where
+            1=1
+     <if test="getjobInfoId != null and getjobInfoId  !='' ">and a.GETJOB_INFO_ID = #{getjobInfoId}</if>
+     <if test="specialtyInfoId != null and specialtyInfoId  !='' ">and a.SPECIALTY_INFO_ID = #{specialtyInfoId}</if>
+     <if test="specialtyName != null and specialtyName  !='' ">and a.SPECIALTY_NAME = #{specialtyName}</if>
+     <if test="postName != null and postName  !='' ">and a.POST_NAME = #{postName}</if>
+     <if test="postPay != null and postPay  !='' ">and a.POST_PAY = #{postPay}</if>
+     <if test="getjobInfo != null and getjobInfo  !='' ">and a.GETJOB_INFO = #{getjobInfo}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+        order by a.create_time desc
+    </select>
+
+    <!--查询一条  -->
+    <select id="queryGetjobInfoById" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.GetjobInfoEntity">
+        SELECT
+        <include refid="columnName"/>
+        FROM
+        K_GETJOB_INFO a
+        WHERE
+        1=1
+     <if test="getjobInfoId != null and getjobInfoId  !='' ">and a.GETJOB_INFO_ID = #{getjobInfoId}</if>
+     <if test="specialtyInfoId != null and specialtyInfoId  !='' ">and a.SPECIALTY_INFO_ID = #{specialtyInfoId}</if>
+     <if test="specialtyName != null and specialtyName  !='' ">and a.SPECIALTY_NAME = #{specialtyName}</if>
+     <if test="postName != null and postName  !='' ">and a.POST_NAME = #{postName}</if>
+     <if test="postPay != null and postPay  !='' ">and a.POST_PAY = #{postPay}</if>
+     <if test="getjobInfo != null and getjobInfo  !='' ">and a.GETJOB_INFO = #{getjobInfo}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+		
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+    </select>
+</mapper>

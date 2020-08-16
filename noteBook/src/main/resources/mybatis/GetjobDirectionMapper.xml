@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youkeda.notebook.service.noteBook.mapper.GetjobDirectionMapper" >
+    <sql id="columnName">
+		a.GETJOB_DIRECTION_ID AS "getjobDirectionId",
+		a.SPECIALTY_INFO_ID AS "specialtyInfoId",
+		a.SPECIALTY_NAME AS "specialtyName",
+		a.POST_ASK AS "postAsk",
+		a.POST_PAY_AVG AS "postPayAvg",
+		a.POST_DEVELOP AS "postDevelop",
+		a.GETJOB_LEARNER_INFO AS "getjobLearnerInfo",
+		a.GETJOB_DIRECTION AS "getjobDirection",
+		a.sob_id AS "sobId",
+		a.create_id AS "createId",
+		a.create_name AS "createName",
+		a.create_time AS "createTime",
+		a.create_post_id AS "createPostId",
+		a.create_post_name AS "createPostName",
+		a.update_post_id AS "updatePostId",
+		a.update_post_name AS "updatePostName",
+		a.update_id AS "updateId",
+		a.update_name AS "updateName",
+		a.update_time AS "updateTime",
+		a.flag AS "flag",
+		a.is_success AS "isSuccess",
+		a.success_code AS "successCode",
+		a.token AS "token"
+	</sql>
+
+    <!-- 新增     -->
+    <insert id="insertGetjobDirection" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity">
+        INSERT INTO
+        K_GETJOB_DIRECTION        (
+			GETJOB_DIRECTION_ID , 
+			SPECIALTY_INFO_ID , 
+			SPECIALTY_NAME , 
+			<if test="postAsk != null and postAsk !='' ">  POST_ASK , </if>
+			<if test="postPayAvg != null and postPayAvg !='' ">  POST_PAY_AVG , </if>
+			<if test="postDevelop != null and postDevelop !='' ">  POST_DEVELOP , </if>
+			<if test="getjobLearnerInfo != null and getjobLearnerInfo !='' ">  GETJOB_LEARNER_INFO , </if>
+			<if test="getjobDirection != null and getjobDirection !='' ">  GETJOB_DIRECTION , </if>
+			sob_id , 
+			create_id , 
+			create_name , 
+			create_time , 
+			create_post_id , 
+			create_post_name , 
+			flag , 
+			<if test="isSuccess != null and isSuccess !='' ">  is_success , </if>
+			<if test="successCode != null and successCode !='' ">  success_code , </if>
+			token 
+        )
+        VALUES
+        (
+	          #{getjobDirectionId}, 
+	          #{specialtyInfoId}, 
+	          #{specialtyName}, 
+			<if test="postAsk != null and postAsk !='' "> #{postAsk}, </if>
+			<if test="postPayAvg != null and postPayAvg !='' "> #{postPayAvg}, </if>
+			<if test="postDevelop != null and postDevelop !='' "> #{postDevelop}, </if>
+			<if test="getjobLearnerInfo != null and getjobLearnerInfo !='' "> #{getjobLearnerInfo}, </if>
+			<if test="getjobDirection != null and getjobDirection !='' "> #{getjobDirection}, </if>
+			 #{sobId}, 
+			 #{createId}, 
+			 #{createName}, 
+			 now(), 
+			 #{createPostId}, 
+			 #{createPostName}, 
+			 0, 
+			<if test="isSuccess != null and isSuccess !='' "> #{isSuccess}, </if>
+			<if test="successCode != null and successCode !='' "> #{successCode}, </if>
+			 #{token}
+        )
+    </insert>
+
+    <update id="updateGetjobDirection" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity">
+        update
+        K_GETJOB_DIRECTION        set
+			<if test="getjobDirectionId != null and getjobDirectionId !='' "> GETJOB_DIRECTION_ID = #{getjobDirectionId}, </if>
+			<if test="specialtyInfoId != null and specialtyInfoId !='' "> SPECIALTY_INFO_ID = #{specialtyInfoId}, </if>
+			<if test="specialtyName != null and specialtyName !='' "> SPECIALTY_NAME = #{specialtyName}, </if>
+			<if test="postAsk != null and postAsk !='' "> POST_ASK = #{postAsk}, </if>
+			<if test="postPayAvg != null and postPayAvg !='' "> POST_PAY_AVG = #{postPayAvg}, </if>
+			<if test="postDevelop != null and postDevelop !='' "> POST_DEVELOP = #{postDevelop}, </if>
+			<if test="getjobLearnerInfo != null and getjobLearnerInfo !='' "> GETJOB_LEARNER_INFO = #{getjobLearnerInfo}, </if>
+			<if test="getjobDirection != null and getjobDirection !='' "> GETJOB_DIRECTION = #{getjobDirection}, </if>
+			<if test="flag != null and flag !='' "> flag = #{flag}, </if>
+			<if test="token != null and token !='' "> token = #{token}, </if>
+			update_id = #{updateId},
+			update_name = #{updateName},
+			update_post_id = #{updatePostId},
+			update_post_name = #{updatePostName},
+			update_time = now()
+        where
+        1=1
+            and GETJOB_DIRECTION_ID= #{getjobDirectionId}
+         	and token= #{oldToken}
+    </update>
+
+    <!-- 查询 -->
+    <select id="listGetjobDirection" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity">
+        SELECT
+        <include refid="columnName" />
+        FROM
+        K_GETJOB_DIRECTION a
+        where
+            1=1
+     <if test="getjobDirectionId != null and getjobDirectionId  !='' ">and a.GETJOB_DIRECTION_ID = #{getjobDirectionId}</if>
+     <if test="specialtyInfoId != null and specialtyInfoId  !='' ">and a.SPECIALTY_INFO_ID = #{specialtyInfoId}</if>
+     <if test="specialtyName != null and specialtyName  !='' ">and a.SPECIALTY_NAME = #{specialtyName}</if>
+     <if test="postAsk != null and postAsk  !='' ">and a.POST_ASK = #{postAsk}</if>
+     <if test="postPayAvg != null and postPayAvg  !='' ">and a.POST_PAY_AVG = #{postPayAvg}</if>
+     <if test="postDevelop != null and postDevelop  !='' ">and a.POST_DEVELOP = #{postDevelop}</if>
+     <if test="getjobLearnerInfo != null and getjobLearnerInfo  !='' ">and a.GETJOB_LEARNER_INFO = #{getjobLearnerInfo}</if>
+     <if test="getjobDirection != null and getjobDirection  !='' ">and a.GETJOB_DIRECTION = #{getjobDirection}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+        order by a.create_time desc
+    </select>
+
+    <!--查询一条  -->
+    <select id="queryGetjobDirectionById" parameterType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.GetjobDirectionEntity">
+        SELECT
+        <include refid="columnName"/>
+        FROM
+        K_GETJOB_DIRECTION a
+        WHERE
+        1=1
+     <if test="getjobDirectionId != null and getjobDirectionId  !='' ">and a.GETJOB_DIRECTION_ID = #{getjobDirectionId}</if>
+     <if test="specialtyInfoId != null and specialtyInfoId  !='' ">and a.SPECIALTY_INFO_ID = #{specialtyInfoId}</if>
+     <if test="specialtyName != null and specialtyName  !='' ">and a.SPECIALTY_NAME = #{specialtyName}</if>
+     <if test="postAsk != null and postAsk  !='' ">and a.POST_ASK = #{postAsk}</if>
+     <if test="postPayAvg != null and postPayAvg  !='' ">and a.POST_PAY_AVG = #{postPayAvg}</if>
+     <if test="postDevelop != null and postDevelop  !='' ">and a.POST_DEVELOP = #{postDevelop}</if>
+     <if test="getjobLearnerInfo != null and getjobLearnerInfo  !='' ">and a.GETJOB_LEARNER_INFO = #{getjobLearnerInfo}</if>
+     <if test="getjobDirection != null and getjobDirection  !='' ">and a.GETJOB_DIRECTION = #{getjobDirection}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+		
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+    </select>
+</mapper>

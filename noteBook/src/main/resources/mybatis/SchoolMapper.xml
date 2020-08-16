@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.youkeda.notebook.service.noteBook.mapper.SchoolMapper" >
+    <sql id="columnName">
+		a.SCHOOL_ID AS "schoolId",
+		a.SCHOOL_NAME AS "schoolName",
+		a.SCHOOL_INFO AS "schoolInfo",
+		a.PROVINCE AS "province",
+		a.sob_id AS "sobId",
+		a.create_id AS "createId",
+		a.create_name AS "createName",
+		a.create_time AS "createTime",
+		a.create_post_id AS "createPostId",
+		a.create_post_name AS "createPostName",
+		a.update_post_id AS "updatePostId",
+		a.update_post_name AS "updatePostName",
+		a.update_id AS "updateId",
+		a.update_name AS "updateName",
+		a.update_time AS "updateTime",
+		a.flag AS "flag",
+		a.is_success AS "isSuccess",
+		a.success_code AS "successCode",
+		a.token AS "token"
+	</sql>
+
+    <!-- 新增     -->
+    <insert id="insertSchool" parameterType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity">
+        INSERT INTO
+        K_SCHOOL        (
+			SCHOOL_ID , 
+			SCHOOL_NAME , 
+			SCHOOL_INFO , 
+			PROVINCE , 
+			sob_id , 
+			create_id , 
+			create_name , 
+			create_time , 
+			create_post_id , 
+			create_post_name , 
+			flag , 
+			<if test="isSuccess != null and isSuccess !='' ">  is_success , </if>
+			<if test="successCode != null and successCode !='' ">  success_code , </if>
+			token 
+        )
+        VALUES
+        (
+	          #{schoolId}, 
+	          #{schoolName}, 
+	          #{schoolInfo}, 
+	          #{province}, 
+			 #{sobId}, 
+			 #{createId}, 
+			 #{createName}, 
+			 now(), 
+			 #{createPostId}, 
+			 #{createPostName}, 
+			 0, 
+			<if test="isSuccess != null and isSuccess !='' "> #{isSuccess}, </if>
+			<if test="successCode != null and successCode !='' "> #{successCode}, </if>
+			 #{token}
+        )
+    </insert>
+
+    <update id="updateSchool" parameterType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity">
+        update
+        K_SCHOOL        set
+			<if test="schoolId != null and schoolId !='' "> SCHOOL_ID = #{schoolId}, </if>
+			<if test="schoolName != null and schoolName !='' "> SCHOOL_NAME = #{schoolName}, </if>
+			<if test="schoolInfo != null and schoolInfo !='' "> SCHOOL_INFO = #{schoolInfo}, </if>
+			<if test="province != null and province !='' "> PROVINCE = #{province}, </if>
+			<if test="flag != null and flag !='' "> flag = #{flag}, </if>
+			<if test="token != null and token !='' "> token = #{token}, </if>
+			update_id = #{updateId},
+			update_name = #{updateName},
+			update_post_id = #{updatePostId},
+			update_post_name = #{updatePostName},
+			update_time = now()
+        where
+        1=1
+            and SCHOOL_ID= #{schoolId}
+         	and token= #{oldToken}
+    </update>
+
+    <!-- 查询 -->
+    <select id="listSchool" parameterType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity">
+        SELECT
+        <include refid="columnName" />
+        FROM
+        K_SCHOOL a
+        where
+            1=1
+     <if test="schoolId != null and schoolId  !='' ">and a.SCHOOL_ID = #{schoolId}</if>
+     <if test="schoolName != null and schoolName  !='' ">and a.SCHOOL_NAME = #{schoolName}</if>
+     <if test="schoolInfo != null and schoolInfo  !='' ">and a.SCHOOL_INFO = #{schoolInfo}</if>
+     <if test="province != null and province  !='' ">and a.PROVINCE = #{province}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+        order by a.create_time desc
+    </select>
+
+    <!--查询一条  -->
+    <select id="querySchoolById" parameterType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity"
+            resultType="com.youkeda.notebook.service.noteBook.entity.SchoolEntity">
+        SELECT
+        <include refid="columnName"/>
+        FROM
+        K_SCHOOL a
+        WHERE
+        1=1
+     <if test="schoolId != null and schoolId  !='' ">and a.SCHOOL_ID = #{schoolId}</if>
+     <if test="schoolName != null and schoolName  !='' ">and a.SCHOOL_NAME = #{schoolName}</if>
+     <if test="schoolInfo != null and schoolInfo  !='' ">and a.SCHOOL_INFO = #{schoolInfo}</if>
+     <if test="province != null and province  !='' ">and a.PROVINCE = #{province}</if>
+		<if test="sobId != null and sobId  !='' ">and a.sob_id = #{sobId}</if>
+		
+     	<choose>  
+            <when test='flag !=null and flag !="all"  '>  
+                and a.flag=#{flag}
+            </when > 
+            <when test='flag !=null and flag =="all" '>  
+            </when >   
+            <otherwise>
+            	and a.flag=0  
+            </otherwise>  
+        </choose>   
+    </select>
+</mapper>
